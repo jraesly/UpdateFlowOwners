@@ -1,6 +1,13 @@
 const axios = require("axios");
 const core = require('@actions/core');
 
+async function generateBearerToken(clientId, clientSecret, tenantId, environmentId) {
+    const response = await axios.post(`https://login.microsoftonline.com/${tenantId}/oauth2/v2.0/token`,
+        `client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials&scope=https://api.crm.dynamics.com/${environmentId}`);
+    console.log("Bearer token Acquired");
+    return response.data.access_token;
+}
+
 async function updateFlowOwners(bearerToken, orgUrl, ownerId) {
     const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows`, {
         headers: {
@@ -25,7 +32,7 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId) {
     });
 }
 
-function main(clientId, clientSecret, tenantId, orgUrl, environmentId) {
+async function main(clientId, clientSecret, tenantId, orgUrl, environmentId) {
     console.log("Entering main...")
     clientId = core.getInput('clientId', { required: true });
     clientSecret = core.getInput('clientSecret', { required: true });
