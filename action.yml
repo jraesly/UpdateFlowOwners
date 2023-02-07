@@ -1,0 +1,25 @@
+name: 'Update Power Automate Flows'
+description: 'A Github Action to update the owner of Power Automate flows to an Application ID'
+author: 'John Raesly'
+inputs:
+  clientId:
+    description: 'The Application ID for the Power Automate flows'
+    required: true
+  clientSecret:
+    description: 'The Application Secret for the Power Automate flows'
+    required: true
+  tenantId:
+    description: 'The guid for the tenant'
+    required: true
+  environmentId:
+    description: 'The environment Guid for the Power Automate flows'
+    required: true
+  orgUrl:
+    description: 'The organization url all the way to end of .com'
+    required: true
+  ownerId:
+    description: 'Guid of the systemuser to set as Owner'
+    required: true
+runs:
+  using: 'node16'
+  main: 'index.js'
