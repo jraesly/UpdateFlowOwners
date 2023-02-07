@@ -11,7 +11,7 @@ async function getBearerToken(clientId, clientSecret, tenantId) {
     try {
         const response = await axios.post(
             `https://login.microsoftonline.com/${tenantId}/oauth2/token`,
-            `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=https://api.dynamics.com`,
+            `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=https://dvagov-ormdi-build.crm9.dynamics.com`,
             {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
