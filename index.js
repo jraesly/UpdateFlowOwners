@@ -27,12 +27,12 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId) {
 
 function main(clientId, clientSecret, tenantId, orgUrl, environmentId) {
     console.log("Entering main...")
-    const clientId = core.getInput('clientId', { required: true });
-    const clientSecret = core.getInput('clientSecret', { required: true });
-    const tenantId = core.getInput('tenantId', { required: true });
-    const orgUrl = core.getInput('orgUrl', { required: true });
-    const environmentId = core.getInput('environmentId', { required: true });
-    const ownerId = core.getInput('ownerId', { required: true });
+    clientId = core.getInput('clientId', { required: true });
+    clientSecret = core.getInput('clientSecret', { required: true });
+    tenantId = core.getInput('tenantId', { required: true });
+    orgUrl = core.getInput('orgUrl', { required: true });
+    environmentId = core.getInput('environmentId', { required: true });
+    ownerId = core.getInput('ownerId', { required: true });
     console.log("Grabbed Variables Successfully");
     try {
         const bearerToken = await generateBearerToken(clientId, clientSecret, tenantId, environmentId);
