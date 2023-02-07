@@ -7,7 +7,23 @@ async function generateBearerToken(clientId, clientSecret, tenantId, environment
     console.log("Bearer token Acquired");
     return response.data.access_token;
 }
-
+async function getBearerToken(clientId, clientSecret, tenantId) {
+    try {
+        const response = await axios.post(
+            `https://login.microsoftonline.com/${tenantId}/oauth2/token`,
+            `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&resource=https://api.dynamics.com`,
+            {
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            }
+        );
+        console.log("Bearer token Acquired");
+        return response.data.access_token;
+    } catch (error) {
+        console.error(error);
+    }
+}
 async function updateFlowOwners(bearerToken, orgUrl, ownerId) {
     const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows`, {
         headers: {
@@ -42,7 +58,7 @@ async function main(clientId, clientSecret, tenantId, orgUrl, environmentId) {
     ownerId = core.getInput('ownerId', { required: true });
     console.log("Grabbed Variables Successfully");
     try {
-        const bearerToken = await generateBearerToken(clientId, clientSecret, tenantId, environmentId);
+        const bearerToken = await getBearerToken(clientId, clientSecret, tenantId);
         updateFlowOwners(bearerToken, orgUrl, ownerId);
         console.log(`Flows Updated Successfully`);
         console.log("Exiting....")
