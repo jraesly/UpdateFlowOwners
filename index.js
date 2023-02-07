@@ -59,6 +59,7 @@ async function main(clientId, clientSecret, tenantId, orgUrl, environmentId) {
     console.log("Grabbed Variables Successfully");
     try {
         const bearerToken = await getBearerToken(clientId, clientSecret, tenantId);
+        console.log(`Entering Flow Updates`);
         updateFlowOwners(bearerToken, orgUrl, ownerId);
         console.log(`Flows Updated Successfully`);
         console.log("Exiting....")
