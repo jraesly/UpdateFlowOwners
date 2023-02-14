@@ -11,8 +11,8 @@ inputs:
   tenantId:
     description: 'The guid for the tenant'
     required: true
-  environmentId:
-    description: 'The environment Guid for the Power Automate flows'
+  category:
+    description: 'Integer category'
     required: true
   orgUrl:
     description: 'The organization url all the way to end of .com'
