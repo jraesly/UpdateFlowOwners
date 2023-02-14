@@ -25,52 +25,70 @@ async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
     }
 }
 async function updateFlowOwners(bearerToken, orgUrl, ownerId) {
-    const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows?$filter=category eq 5`, {
+    const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows?$filter=category eq 5 and category eq 5 and _ownerid_value ne ${ownerId}`, {
         headers: {
             Authorization: `Bearer ${bearerToken}`,
         },
     });
     console.log(flows);
     console.log(`Flows Retrieved. Count: ${flows.data.value.length}`);
-    var count = 1;
+
     
-    flows.data.value.forEach( flow => {
+    flows.data.value.forEach( function (flow, count) {
+        setTimeout(() => {
+        var count = 1;
         console.log(`updating flow now: ${count}`);
-        axios.patch(`${orgUrl}/api/data/v9.1/workflows(${flow.workflowid})`, 
-        {
-            "description": "This flow will ensure consistency across systems.",
-            "statecode": 1,
-            "ownerid@odata.bind": `systemusers(${ownerId})`
-        },
-        {
-            headers: {
-                Authorization: `Bearer ${bearerToken}`,
-                'Accept': 'application/json',
-                'OData-Version': '4.0',
-                'Content-Type': 'application/json',
-                'OData-MaxVersion': '4.0'
+        axios.patch(`${orgUrl}/api/data/v9.1/workflows(${flow.workflowid})`,
+            {
+                "description": "This flow will ensure consistency across systems.",
+                "statecode": 1,
+                "ownerid@odata.bind": `systemusers(${ownerId})`
             },
-        });
+            {
+                headers: {
+                    Authorization: `Bearer ${bearerToken}`,
+                    'Accept': 'application/json',
+                    'OData-Version': '4.0',
+                    'Content-Type': 'application/json',
+                    'OData-MaxVersion': '4.0'
+                },
+            })
+            .catch(function (error) {
+                if (error.response) {
+                    // Request made and server responded
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(error.request);
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+
+            });
         count++;
+        }, count * 1000)
     });
+    console.log(`Flows Updated Successfully`);
+    console.log("Exiting....")
 }
 
 async function main(/*clientId, clientSecret, tenantId, orgUrl, environmentId*/) {
     console.log("Entering main...")
-    clientId = "****";//core.getInput('clientId', { required: true });
-    clientSecret = "****";//core.getInput('clientSecret', { required: true });
-    tenantId = "*****;//core.getInput('tenantId', { required: true });
-    orgUrl = "https://dvagov-ormdi-int.crm9.dynamics.com";//core.getInput('orgUrl', { required: true });
-    environmentId = "8098603c-68a4-47f5-ba13-6ddb840b8589";//INT"8098603c-68a4-47f5-ba13-6ddb840b8589";//"0bc156d3-bd12-4b08-a73c-cdb5b7a81a28"; build //core.getInput('environmentId', { required: true });
-    ownerId = "3adf2f88-086b-eb11-a812-001dd801e652";//core.getInput('ownerId', { required: true });
+    clientId = //core.getInput('clientId', { required: true });
+    clientSecret = //core.getInput('clientSecret', { required: true });
+    tenantId =  //core.getInput('tenantId', { required: true });
+    orgUrl = //core.getInput('orgUrl', { required: true });
+    environmentId = //INT"8098603c-68a4-47f5-ba13-6ddb840b8589";//"0bc156d3-bd12-4b08-a73c-cdb5b7a81a28"; build //core.getInput('environmentId', { required: true });
+    ownerId = //core.getInput('ownerId', { required: true });
 
     console.log("Grabbed Variables Successfully");
     try {
         const bearerToken = await getBearerToken(clientId, clientSecret, tenantId, orgUrl);
         console.log(`Entering Flow Updates`);
         updateFlowOwners(bearerToken, orgUrl, ownerId);
-        console.log(`Flows Updated Successfully`);
-        console.log("Exiting....")
     }
     catch (error) {
         console.log(error.message);
