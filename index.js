@@ -24,7 +24,6 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, category) {
             Authorization: `Bearer ${bearerToken}`,
         },
     });
-    console.log(flows);
     console.log(`Flows Retrieved. Count: ${flows.data.value.length}`);
 
     
