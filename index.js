@@ -1,5 +1,6 @@
 const axios = require("axios");
 const core = require('@actions/core');
+let i = 0;
 
 async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
     try {
@@ -18,6 +19,7 @@ async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
         console.error(error);
     }
 }
+
 async function updateFlowOwners(bearerToken, orgUrl, ownerId, category) {
     const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows?$filter=category eq ${category} and _ownerid_value ne ${ownerId}`, {
         headers: {
@@ -26,15 +28,12 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, category) {
     });
     console.log(`Flows Retrieved. Count: ${flows.data.value.length}`);
 
-    
-    flows.data.value.forEach( function (flow, count) {
-        setTimeout(() => {
-        var count = 1;
-        console.log(`updating flow now: ${count}`);
-        axios.patch(`${orgUrl}/api/data/v9.1/workflows(${flow.workflowid})`,
+    async function updateFlow(flow) {
+        console.log(`updating flow now: ${i}`);
+        await axios.patch(`${orgUrl}/api/data/v9.1/workflows(${flow.workflowid})`,
             {
- //               "description": "This flow will ensure consistency across systems.",
-//                "statecode": 1,
+                //"description": "This flow will ensure consistency across systems.",
+                //"statecode": 1,
                 "ownerid@odata.bind": `systemusers(${ownerId})`
             },
             {
@@ -45,28 +44,19 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, category) {
                     'Content-Type': 'application/json',
                     'OData-MaxVersion': '4.0'
                 },
-            })
-            .catch(function (error) {
-                if (error.response) {
-                    // Request made and server responded
-                    console.log(error.response.data);
-                    console.log(error.response.status);
-                    console.log(error.response.headers);
-                } else if (error.request) {
-                    // The request was made but no response was received
-                    console.log(error.request);
-                } else {
-                    // Something happened in setting up the request that triggered an Error
-                    console.log('Error', error.message);
-                }
-
             });
-        count++;
-        }, count * 1000)
-    });
-    console.log(`Flows Updated Successfully`);
-    console.log("Exiting....")
+        i++;
+        if (i < flows.data.value.length) {
+            setTimeout(() => updateFlow(flows.data.value[i]), 1000);
+        } else {
+            console.log(`Flows Updated Successfully`);
+            console.log("Exiting....");
+        }
+    }
+
+    updateFlow(flows.data.value[i]);
 }
+
 
 async function main() {
     console.log("Entering main...")
