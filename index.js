@@ -1,6 +1,6 @@
 const axios = require("axios");
 const core = require('@actions/core');
-let i = 0;
+let i = 1;
 
 async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
     try {
