@@ -50,7 +50,9 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, system) {
         } 
         catch (error) 
         {
-            console.log(flow.name + ': ' + error.response.data.error.message); // this is the main part. Use the response property from the error object
+            // this is the main part. Use the response property from the error object
+            console.log(flow.name + ': ' + error.response.data.error.message); 
+            console.log('Please update ' + flow.name + ' connection references as this is the usual culprit')
         }
         i++;
         if (i < flows.data.value.length) 
