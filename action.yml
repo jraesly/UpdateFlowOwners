@@ -11,8 +11,8 @@ inputs:
   tenantId:
     description: 'The guid for the tenant'
     required: true
-  category:
-    description: 'Integer category'
+  system:
+    description: "Include your 'SYSTEM' systemuserid to be ignored as these are MSFT flows"
     required: true
   orgUrl:
     description: 'The organization url all the way to end of .com'
