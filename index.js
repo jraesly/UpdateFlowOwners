@@ -57,7 +57,7 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, system) {
         i++;
         if (i < flows.data.value.length) 
         {
-            console.log('Waiting one second to avoid Too Many Requests Error')
+            console.log('Waiting one second to avoid 429: Too Many Requests Error')
             setTimeout(() => updateFlow(flows.data.value[i]), 1000);
         } else 
         {
