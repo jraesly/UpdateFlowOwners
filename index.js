@@ -1,7 +1,9 @@
+// Require necessary packages to run script
 const axios = require("axios");
 const core = require('@actions/core');
 let i = 1;
 
+/// Retrieves a bearer token using client id and secret
 async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
     try {
         const response = await axios.post(
@@ -21,6 +23,7 @@ async function getBearerToken(clientId, clientSecret, tenantId, orgUrl) {
 }
 
 async function updateFlowOwners(bearerToken, orgUrl, ownerId, system) {
+    // Retrieve all modern flows that do not already have the desired owner and filters out 'SYSTEM' Account flows
     const flows = await axios.get(`${orgUrl}/api/data/v9.1/workflows?$filter=category eq 5 and _ownerid_value ne ${ownerId} and _ownerid_value ne ${system}`, {
         headers: {
             Authorization: `Bearer ${bearerToken}`,
@@ -54,6 +57,7 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, system) {
             console.log(flow.name + ': ' + error.response.data.error.message); 
             console.log('Please update ' + flow.name + ' connection references as this is the usual culprit')
         }
+        // increment counter for logging purposes
         i++;
         if (i < flows.data.value.length) 
         {
@@ -71,6 +75,7 @@ async function updateFlowOwners(bearerToken, orgUrl, ownerId, system) {
 
 async function main() {
     console.log("Entering main...")
+    // Grab all required parameters
     var clientId =  core.getInput('clientId', { required: true });
     var clientSecret = core.getInput('clientSecret', { required: true });
     var tenantId = core.getInput('tenantId', { required: true });
