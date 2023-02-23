@@ -12,7 +12,7 @@ inputs:
     description: 'The guid for the tenant'
     required: true
   system:
-    description: "Include your 'SYSTEM' systemuserid to be ignored as these are MSFT flows"
+    description: "Include your 'SYSTEM' systemuserid to be ignored as these are MSFT managed flows"
     required: true
   orgUrl:
     description: 'The organization url all the way to end of .com'
