@@ -1,5 +1,5 @@
 name: 'Update Power Automate Flows'
-description: 'A Github Action to update the owner of Power Automate flows to an Application ID'
+description: 'A Github Action to update the owner of Power Automate flows using an Application ID'
 author: 'John Raesly'
 inputs:
   clientId:
