@@ -111,7 +111,7 @@ async function main() {
     var tenantId = core.getInput('tenantId', { required: true });
     var orgUrl =  core.getInput('orgUrl', { required: true });
     var ownerId = core.getInput('ownerId', { required: true });
-    var system =  core.getInput('system', { required: true });
+    var system =  core.getInput('system', { required: false });
 
     console.log("Grabbed Variables Successfully");
     try {
